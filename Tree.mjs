@@ -9,6 +9,27 @@ export default function Node(data = null, left = null, right = null) {
 }
 
 export function Tree(arr) {
+	function insert(val) {
+		const leafNode = Node(val, null, null);
+
+		let node = root;
+		while (true) {
+			if (leafNode.data > node.data) {
+				if (node.right === null) {
+					node.right = leafNode;
+					break;
+				}
+				node = node.right;
+			} else if (leafNode.data < node.data) {
+				if (node.left === null) {
+					node.left = leafNode;
+					break;
+				}
+				node = node.left;
+			}
+		}
+	}
+
 	function buildTree(arr) {
 		if (arr.length === 1) return Node(arr[0], null, null);
 
@@ -25,8 +46,5 @@ export function Tree(arr) {
 	const sortedArr = sort(arr);
 	let root = buildTree(sortedArr);
 
-	return { root, buildTree };
+	return { root, buildTree, insert };
 }
-
-let t = Tree(ar);
-pp(t.root);
