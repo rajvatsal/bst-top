@@ -58,19 +58,11 @@ export function Tree(arr) {
 					return { leftMost, parent };
 				};
 
-				// add reference of leftMost's children to parent
-				const addChildRef = (ref) => {
-					if (parent === left) parent.right = ref;
-					else parent.left = ref;
-				};
-
 				// last case has two children
 				let { leftMost, parent } = getLeftMost();
+				let branch = parent === left ? "right" : "left";
 
-				if (leftMost.right === null && leftMost.left !== null)
-					addChildRef(leftMost.left);
-				else if (leftMost.right !== null && leftMost.left === null)
-					addChildRef(leftMost.right);
+				parent[branch] = leftMost.right;
 
 				leftMost.left = left.left;
 				leftMost.right = left.right;
@@ -142,4 +134,6 @@ export function Tree(arr) {
 }
 
 let t = Tree(ar);
+pp(t.root);
+t.deleteItem(8);
 pp(t.root);
