@@ -21,24 +21,26 @@ export function Tree(arr) {
 	}
 
 	function deleteItem(val) {
+		const isDataInRoot = () => root.data === val;
 		let node = root;
 		while (true) {
-			const nodeBranch =
-				node.left.data === val
+			const nodeBranch = isDataInRoot()
+				? null
+				: node.left.data === val
 					? "left"
 					: node.right.data === val
 						? "right"
 						: null;
 
 			// continue if val is not in node's branches
-			if (nodeBranch === null) {
+			if (nodeBranch === null && !isDataInRoot()) {
 				if (val < node.data) node = node.left;
 				else node = node.right;
 				continue;
 			}
 
 			// main code
-			const mainChild = node[nodeBranch];
+			const mainChild = isDataInRoot() ? root : node[nodeBranch];
 
 			// first case leaf node
 			if (mainChild.left === null && mainChild.right === null) {
@@ -49,6 +51,11 @@ export function Tree(arr) {
 			// second case has one child
 			if (mainChild.left === null || mainChild.right === null) {
 				let mainChildBranch = mainChild.left === null ? "right" : "left";
+				if (isDataInRoot()) {
+					mainChild[mainChildBranch] = root;
+					node[mainChildBranch] = null;
+					break;
+				}
 				node[nodeBranch] = mainChild[mainChildBranch];
 				mainChild[mainChildBranch] = null;
 				break;
@@ -76,7 +83,12 @@ export function Tree(arr) {
 			leftMost.left = mainChild.left;
 			leftMost.right = mainChild.right;
 
-			node[nodeBranch] = leftMost;
+			if (!isDataInRoot()) node[nodeBranch] = leftMost;
+			else {
+				root.left = null;
+				root.right = null;
+				root = leftMost;
+			}
 			break;
 		}
 	}
@@ -118,10 +130,7 @@ export function Tree(arr) {
 	const sortedArr = sort(arr);
 	let root = buildTree(sortedArr);
 
-	return { root, buildTree, insert, deleteItem };
-}
+	const getRoot = () => root;
 
-let t = Tree(ar);
-pp(t.root);
-t.deleteItem(67);
-pp(t.root);
+	return { getRoot, buildTree, insert, deleteItem };
+}
