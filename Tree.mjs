@@ -20,6 +20,87 @@ export function Tree(arr) {
 		return node;
 	}
 
+	function deleteItem(val, entryNode = root) {
+		let node = entryNode;
+		while (true) {
+			const left = node.left;
+			const right = node.right;
+			if (left.data === val) {
+				// left = child && node = parent
+				// first case leaf node
+				if (left.left === null && left.right === null) {
+					node.left = null;
+					break;
+				}
+
+				// second case has one child
+				if (left.left !== null && left.right === null) {
+					node.left = left.left;
+					left.left = null;
+					break;
+				}
+				if (left.left === null && left.right !== null) {
+					node.left = left.right;
+					left.right = null;
+					break;
+				}
+
+				const getLeftMost = (leftMost = left.right, parent = left) => {
+					if (leftMost.left !== null) {
+						parent = left.right;
+						leftMost = parent.left;
+						while (true) {
+							if (leftMost.left === null) break;
+							parent = leftMost;
+							leftMost = leftMost.left;
+						}
+					}
+					return { leftMost, parent };
+				};
+
+				// add reference of leftMost's children to parent
+				const addChildRef = (ref) => {
+					if (parent === left) parent.right = ref;
+					else parent.left = ref;
+				};
+
+				// last case has two children
+				let { leftMost, parent } = getLeftMost();
+
+				if (leftMost.right === null && leftMost.left !== null)
+					addChildRef(leftMost.left);
+				else if (leftMost.right !== null && leftMost.left === null)
+					addChildRef(leftMost.right);
+
+				leftMost.left = left.left;
+				leftMost.right = left.right;
+
+				node.left = leftMost;
+
+				break;
+			} else if (right.data === val) {
+				// first case leaf node
+				if (right.left === null && right.right === null) {
+					node.right = null;
+					break;
+				}
+
+				// second case has one child
+				if (right.left !== null && right.right === null) {
+					node.right = right.left;
+					right.left = null;
+					break;
+				}
+				if (right.left === null && right.right !== null) {
+					node.right = right.right;
+					right.right = null;
+					break;
+				}
+			} else if (val < node.data) node = node.left;
+			else node = node.right;
+		}
+	}
+
 	function insert(val) {
 		const leafNode = Node(val, null, null);
 
@@ -57,5 +138,8 @@ export function Tree(arr) {
 	const sortedArr = sort(arr);
 	let root = buildTree(sortedArr);
 
-	return { root, buildTree, insert, find };
+	return { root, buildTree, insert, deleteItem };
 }
+
+let t = Tree(ar);
+pp(t.root);
