@@ -140,7 +140,7 @@ export function Tree(arr) {
 
 	const getRoot = () => root;
 
-	return { getRoot, buildTree, insert, deleteItem };
+	return { getRoot, buildTree, insert, deleteItem, find };
 }
 
 let t = Tree(ar);
