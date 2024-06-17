@@ -9,6 +9,17 @@ export default function Node(data = null, left = null, right = null) {
 }
 
 export function Tree(arr) {
+	function find(value) {
+		let node = root;
+		while (true) {
+			if (node.data === value) break;
+			else if (node.data < value) node = node.right;
+			else node = node.left;
+		}
+
+		return node;
+	}
+
 	function insert(val) {
 		const leafNode = Node(val, null, null);
 
@@ -46,5 +57,5 @@ export function Tree(arr) {
 	const sortedArr = sort(arr);
 	let root = buildTree(sortedArr);
 
-	return { root, buildTree, insert };
+	return { root, buildTree, insert, find };
 }
