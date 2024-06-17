@@ -114,7 +114,12 @@ export function Tree(arr) {
 		}
 	}
 
-	function buildTree(arr) {
+	function buildTree(arr, isSanitized = true) {
+		if (!isSanitized) arr = sanitizeArray(arr);
+		return buildTreeRecursive(arr);
+	}
+
+	function buildTreeRecursive(arr) {
 		if (arr.length === 1) return Node(arr[0], null, null);
 
 		const middle = Math.floor(arr.length / 2);
@@ -126,11 +131,19 @@ export function Tree(arr) {
 		return node;
 	}
 
-	arr = ed(arr);
-	const sortedArr = sort(arr);
-	let root = buildTree(sortedArr);
+	function sanitizeArray(array) {
+		array = ed(array);
+		return sort(array);
+	}
+
+	let root = buildTree(arr, false);
 
 	const getRoot = () => root;
 
 	return { getRoot, buildTree, insert, deleteItem };
 }
+
+let t = Tree(ar);
+pp(t.getRoot());
+t.deleteItem(8);
+pp(t.getRoot());
