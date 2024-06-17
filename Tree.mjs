@@ -115,7 +115,7 @@ export function Tree(arr) {
 	}
 
 	function buildTree(arr, isSanitized = true) {
-		if (!isSanitized) arr = sanitizeArray(arr);
+		arr = isSanitized ? arr : sanitizeArray(arr);
 		return buildTreeRecursive(arr);
 	}
 
