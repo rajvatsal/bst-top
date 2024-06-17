@@ -1,6 +1,7 @@
 import sort from "./MergeSort.mjs";
 import ed from "./ExcludeDuplicates.mjs";
 import pp from "./PreetyPrint.mjs";
+import qu from "./Queue.mjs";
 
 let ar = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
@@ -9,6 +10,44 @@ export default function Node(data = null, left = null, right = null) {
 }
 
 export function Tree(arr) {
+	function levelOrderTraversal(cb = undefined) {
+		const q = qu(root);
+		return levelOrderTraversalIterative(cb, q);
+	}
+
+	function levelOrderTraversalIterative(cb, queue) {
+		const values = [];
+		while (queue.getLength()) {
+			const currentNode = queue.getFirst();
+			const value = cb === undefined ? currentNode.data : cb(currentNode);
+			if (value === undefined) {
+				throw new Error("Callback didn't return anything");
+				return;
+			}
+
+			values.push(value);
+			queue.enqueue(currentNode.left, currentNode.right);
+			queue.dequeue();
+		}
+
+		return values;
+	}
+
+	function levelOrderTraversalRecursive(cb, queue) {
+		if (queue.getLength() === 0) return [];
+
+		const currentNode = queue.getFirst();
+		const values = [];
+
+		if (cb === undefined) values.push(currentNode.data);
+		else values.push(cb(currentNode));
+
+		queue.dequeue();
+		queue.enqueue(currentNode.left, currentNode.right);
+
+		return [...values, ...levelOrderTraversalRecursive(cb, queue)];
+	}
+
 	function find(value) {
 		let node = root;
 		while (true) {
@@ -140,10 +179,9 @@ export function Tree(arr) {
 
 	const getRoot = () => root;
 
-	return { getRoot, buildTree, insert, deleteItem, find };
+	return { getRoot, buildTree, insert, deleteItem, find, levelOrderTraversal };
 }
 
 let t = Tree(ar);
-pp(t.getRoot());
-t.deleteItem(8);
+console.log(t.levelOrderTraversal());
 pp(t.getRoot());
