@@ -20,76 +20,64 @@ export function Tree(arr) {
 		return node;
 	}
 
-	function deleteItem(val, entryNode = root) {
-		let node = entryNode;
+	function deleteItem(val) {
+		let node = root;
 		while (true) {
-			const left = node.left;
-			const right = node.right;
-			if (left.data === val) {
-				// left = child && node = parent
-				// first case leaf node
-				if (left.left === null && left.right === null) {
-					node.left = null;
-					break;
-				}
+			const nodeBranch =
+				node.left.data === val
+					? "left"
+					: node.right.data === val
+						? "right"
+						: null;
 
-				// second case has one child
-				if (left.left !== null && left.right === null) {
-					node.left = left.left;
-					left.left = null;
-					break;
-				}
-				if (left.left === null && left.right !== null) {
-					node.left = left.right;
-					left.right = null;
-					break;
-				}
+			// continue if val is not in node's branches
+			if (nodeBranch === null) {
+				if (val < node.data) node = node.left;
+				else node = node.right;
+				continue;
+			}
 
-				const getLeftMost = (leftMost = left.right, parent = left) => {
-					if (leftMost.left !== null) {
-						parent = left.right;
-						leftMost = parent.left;
-						while (true) {
-							if (leftMost.left === null) break;
-							parent = leftMost;
-							leftMost = leftMost.left;
-						}
-					}
-					return { leftMost, parent };
-				};
+			// main code
+			const mainChild = node[nodeBranch];
 
-				// last case has two children
-				let { leftMost, parent } = getLeftMost();
-				let branch = parent === left ? "right" : "left";
-
-				parent[branch] = leftMost.right;
-
-				leftMost.left = left.left;
-				leftMost.right = left.right;
-
-				node.left = leftMost;
-
+			// first case leaf node
+			if (mainChild.left === null && mainChild.right === null) {
+				node[nodeBranch] = null;
 				break;
-			} else if (right.data === val) {
-				// first case leaf node
-				if (right.left === null && right.right === null) {
-					node.right = null;
-					break;
-				}
+			}
 
-				// second case has one child
-				if (right.left !== null && right.right === null) {
-					node.right = right.left;
-					right.left = null;
-					break;
+			// second case has one child
+			if (mainChild.left === null || mainChild.right === null) {
+				let mainChildBranch = mainChild.left === null ? "right" : "left";
+				node[nodeBranch] = mainChild[mainChildBranch];
+				mainChild[mainChildBranch] = null;
+				break;
+			}
+
+			const getLeftMost = (leftMost, parent) => {
+				if (leftMost.left !== null) {
+					parent = mainChild.right;
+					leftMost = parent.left;
+					while (true) {
+						if (leftMost.left === null) break;
+						parent = leftMost;
+						leftMost = leftMost.left;
+					}
 				}
-				if (right.left === null && right.right !== null) {
-					node.right = right.right;
-					right.right = null;
-					break;
-				}
-			} else if (val < node.data) node = node.left;
-			else node = node.right;
+				return { leftMost, parent };
+			};
+
+			// last case has two children
+			let { leftMost, parent } = getLeftMost(mainChild.right, mainChild);
+			let branch = parent === mainChild ? "right" : "left";
+
+			parent[branch] = leftMost.right;
+
+			leftMost.left = mainChild.left;
+			leftMost.right = mainChild.right;
+
+			node[nodeBranch] = leftMost;
+			break;
 		}
 	}
 
@@ -135,5 +123,5 @@ export function Tree(arr) {
 
 let t = Tree(ar);
 pp(t.root);
-t.deleteItem(8);
+t.deleteItem(67);
 pp(t.root);
