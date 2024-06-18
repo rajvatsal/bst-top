@@ -2,14 +2,11 @@ import sort from "./MergeSort.mjs";
 import ed from "./ExcludeDuplicates.mjs";
 import pp from "./PreetyPrint.mjs";
 import qu from "./Queue.mjs";
+import Node from "./Node.mjs";
 
 let ar = [1, 7, 4, 23, 8, 9, 10, 4, 3, 5, 7, 9, 67, 6345, 324];
 
-export default function Node(data = null, left = null, right = null) {
-	return { data, left, right };
-}
-
-export function Tree(arr) {
+export default function Tree(arr) {
 	function rebalance() {
 		let values = levelOrderTraversal();
 		values = ed(values);
