@@ -10,7 +10,9 @@ export default function Node(data = null, left = null, right = null) {
 }
 
 export function Tree(arr) {
-	function height(node = root) {
+	function height(val = undefined) {
+		const node = val === undefined ? root : find(val);
+		if (node === null) return -1;
 		return heightRecur(node, true);
 	}
 
@@ -107,6 +109,7 @@ export function Tree(arr) {
 	function find(value) {
 		let node = root;
 		while (true) {
+			if (node === null) return null;
 			if (node.data === value) break;
 			else if (node.data < value) node = node.right;
 			else node = node.left;
@@ -249,5 +252,5 @@ export function Tree(arr) {
 }
 
 let t = Tree(ar);
-console.log(t.height());
+console.log(t.height(100));
 pp(t.getRoot());
