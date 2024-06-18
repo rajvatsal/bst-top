@@ -10,6 +10,17 @@ export default function Node(data = null, left = null, right = null) {
 }
 
 export function Tree(arr) {
+	function depth(val) {
+		let count = 0;
+		let node = root;
+		while (node.data !== val) {
+			node = node.data < val ? node.right : node.left;
+			++count;
+			if (node === null) return -1;
+		}
+		return count;
+	}
+
 	function height(val = undefined) {
 		const node = val === undefined ? root : find(val);
 		if (node === null) return -1;
@@ -248,9 +259,10 @@ export function Tree(arr) {
 		preOrder,
 		inOrder,
 		height,
+		depth,
 	};
 }
 
 let t = Tree(ar);
-console.log(t.height(100));
+console.log(t.depth(100));
 pp(t.getRoot());
