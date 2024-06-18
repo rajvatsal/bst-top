@@ -10,6 +10,20 @@ export default function Node(data = null, left = null, right = null) {
 }
 
 export function Tree(arr) {
+	function height(node = root) {
+		return heightRecur(node, true);
+	}
+
+	function heightRecur(node, isFirstStack = undefined) {
+		if (node === null) return 0;
+		let height = isFirstStack ? 0 : 1;
+
+		const leftBranch = heightRecur(node.left);
+		const rightBranch = heightRecur(node.right);
+
+		return (height += leftBranch > rightBranch ? leftBranch : rightBranch);
+	}
+
 	function postOrder(cb = undefined) {
 		return postOrderRecur(cb, root);
 	}
@@ -230,9 +244,10 @@ export function Tree(arr) {
 		levelOrderTraversal,
 		preOrder,
 		inOrder,
+		height,
 	};
 }
 
 let t = Tree(ar);
-console.log(t.inOrder());
+console.log(t.height());
 pp(t.getRoot());
