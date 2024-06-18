@@ -3,8 +3,7 @@ import ed from "./ExcludeDuplicates.mjs";
 import pp from "./PreetyPrint.mjs";
 import qu from "./Queue.mjs";
 
-let ar = [1, 7, 4, 23, 8, 10, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-let ar1 = [1, 2, 9, 11, 3, 4, 5, 6, 7, 8, 9, 10];
+let ar = [1, 7, 4, 23, 8, 9, 10, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 export default function Node(data = null, left = null, right = null) {
 	return { data, left, right };
@@ -245,20 +244,20 @@ export function Tree(arr) {
 	}
 
 	function buildTreeRecursive(arr) {
-		if (arr.length === 1) return Node(arr[0], null, null);
-
+		if (arr.length === 0) return null;
 		const middle = Math.floor(arr.length / 2);
 		const node = Node(
 			arr[middle],
-			buildTree(arr.slice(0, middle)),
-			middle === 1 ? null : buildTree(arr.slice(-middle)),
+			buildTreeRecursive(arr.slice(0, middle)),
+			buildTreeRecursive(arr.slice(middle + 1)),
 		);
 		return node;
 	}
 
 	function sanitizeArray(array) {
 		array = ed(array);
-		return sort(array);
+		array = sort(array);
+		return array;
 	}
 
 	let root = buildTree(arr, false);
