@@ -10,6 +10,48 @@ export default function Node(data = null, left = null, right = null) {
 }
 
 export function Tree(arr) {
+	function postOrder(cb = undefined) {
+		return postOrderRecur(cb, root);
+	}
+
+	function postOrderRecur(cb, node) {
+		if (node === null) return [];
+		return [
+			...postOrderRecur(cb, node.left),
+			...postOrderRecur(cb, node.right),
+			cb === undefined ? node.data : cb(node),
+		];
+	}
+
+	function inOrder(cb = undefined) {
+		return inOrderRecur(cb, root);
+	}
+
+	function inOrderRecur(cb, currentNode = root) {
+		if (currentNode === null) return [];
+		return [
+			...inOrderRecur(cb, currentNode.left),
+			cb === undefined ? currentNode.data : cb(currentNode),
+			...inOrderRecur(cb, currentNode.right),
+		];
+	}
+
+	function preOrder(cb = undefined) {
+		return preOrderRecursive(cb, root);
+	}
+
+	function preOrderRecursive(cb, currentNode = root) {
+		const value = cb === undefined ? currentNode.data : cb(currentNode);
+		const leftSubTree =
+			currentNode.left === null ? [] : preOrderRecursive(cb, currentNode.left);
+		const rightSubTree =
+			currentNode.right === null
+				? []
+				: preOrderRecursive(cb, currentNode.right);
+
+		return [value, ...leftSubTree, ...rightSubTree];
+	}
+
 	function levelOrderTraversal(cb = undefined) {
 		const q = qu(root);
 		return levelOrderTraversalIterative(cb, q);
@@ -179,9 +221,18 @@ export function Tree(arr) {
 
 	const getRoot = () => root;
 
-	return { getRoot, buildTree, insert, deleteItem, find, levelOrderTraversal };
+	return {
+		getRoot,
+		buildTree,
+		insert,
+		deleteItem,
+		find,
+		levelOrderTraversal,
+		preOrder,
+		inOrder,
+	};
 }
 
 let t = Tree(ar);
-console.log(t.levelOrderTraversal());
+console.log(t.inOrder());
 pp(t.getRoot());
