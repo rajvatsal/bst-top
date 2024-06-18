@@ -276,6 +276,7 @@ export default function Tree(arr) {
 		levelOrderTraversal,
 		preOrder,
 		inOrder,
+		postOrder,
 		height,
 		depth,
 		isBalanced,
@@ -286,10 +287,10 @@ export default function Tree(arr) {
 const ar = random(100);
 let t = Tree(ar);
 console.log(t.isBalanced());
-pp(t.getRoot());
+console.log(t.preOrder(), t.inOrder(), t.postOrder());
 t.insert(101, 109, 190, 550);
 console.log(t.isBalanced());
-pp(t.getRoot());
+console.log(t.preOrder(), t.inOrder(), t.postOrder());
 console.log(t.isBalanced());
 t.rebalance();
 pp(t.getRoot());
