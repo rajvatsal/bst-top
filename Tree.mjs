@@ -10,6 +10,11 @@ export default function Node(data = null, left = null, right = null) {
 }
 
 export function Tree(arr) {
+	function isBalanced() {
+		const difference = height(root.left.data) - height(root.right.data);
+		return difference <= 0 && difference >= -1;
+	}
+
 	function depth(val) {
 		let count = 0;
 		let node = root;
@@ -260,9 +265,14 @@ export function Tree(arr) {
 		inOrder,
 		height,
 		depth,
+		isBalanced,
 	};
 }
 
 let t = Tree(ar);
-console.log(t.depth(100));
+console.log(t.isBalanced());
+t.insert(100);
+t.insert(200);
+t.insert(300);
+console.log(t.isBalanced());
 pp(t.getRoot());
