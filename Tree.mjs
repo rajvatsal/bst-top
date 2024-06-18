@@ -3,13 +3,21 @@ import ed from "./ExcludeDuplicates.mjs";
 import pp from "./PreetyPrint.mjs";
 import qu from "./Queue.mjs";
 
-let ar = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+let ar = [1, 7, 4, 23, 8, 10, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+let ar1 = [1, 2, 9, 11, 3, 4, 5, 6, 7, 8, 9, 10];
 
 export default function Node(data = null, left = null, right = null) {
 	return { data, left, right };
 }
 
 export function Tree(arr) {
+	function rebalance() {
+		let values = levelOrderTraversal();
+		values = ed(values);
+		values = sort(values);
+		root = buildTree(values);
+	}
+
 	function isBalanced() {
 		const difference = height(root.left.data) - height(root.right.data);
 		return difference <= 0 && difference >= -1;
@@ -269,11 +277,9 @@ export function Tree(arr) {
 		height,
 		depth,
 		isBalanced,
+		rebalance,
 	};
 }
 
 let t = Tree(ar);
-console.log(t.isBalanced());
-t.insert(100, 200, 300, "vatsal");
-console.log(t.isBalanced());
 pp(t.getRoot());
