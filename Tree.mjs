@@ -4,7 +4,13 @@ import pp from "./PreetyPrint.mjs";
 import qu from "./Queue.mjs";
 import Node from "./Node.mjs";
 
-let ar = [1, 7, 4, 23, 8, 9, 10, 4, 3, 5, 7, 9, 67, 6345, 324];
+function random(max) {
+	const array = [];
+	for (let i = 0; i < 50; i++) {
+		array.push(Math.floor(Math.random() * max));
+	}
+	return array;
+}
 
 export default function Tree(arr) {
 	function rebalance() {
@@ -277,5 +283,13 @@ export default function Tree(arr) {
 	};
 }
 
+const ar = random(100);
 let t = Tree(ar);
+console.log(t.isBalanced());
+pp(t.getRoot());
+t.insert(101, 109, 190, 550);
+console.log(t.isBalanced());
+pp(t.getRoot());
+console.log(t.isBalanced());
+t.rebalance();
 pp(t.getRoot());
