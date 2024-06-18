@@ -207,23 +207,25 @@ export function Tree(arr) {
 		}
 	}
 
-	function insert(val) {
-		const leafNode = Node(val, null, null);
+	function insert(...val) {
+		for (let v of val) {
+			const leafNode = Node(v, null, null);
 
-		let node = root;
-		while (true) {
-			if (leafNode.data > node.data) {
-				if (node.right === null) {
-					node.right = leafNode;
-					break;
+			let node = root;
+			while (true) {
+				if (leafNode.data > node.data) {
+					if (node.right === null) {
+						node.right = leafNode;
+						break;
+					}
+					node = node.right;
+				} else if (leafNode.data < node.data) {
+					if (node.left === null) {
+						node.left = leafNode;
+						break;
+					}
+					node = node.left;
 				}
-				node = node.right;
-			} else if (leafNode.data < node.data) {
-				if (node.left === null) {
-					node.left = leafNode;
-					break;
-				}
-				node = node.left;
 			}
 		}
 	}
@@ -271,8 +273,6 @@ export function Tree(arr) {
 
 let t = Tree(ar);
 console.log(t.isBalanced());
-t.insert(100);
-t.insert(200);
-t.insert(300);
+t.insert(100, 200, 300);
 console.log(t.isBalanced());
 pp(t.getRoot());
