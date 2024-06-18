@@ -209,6 +209,7 @@ export function Tree(arr) {
 
 	function insert(...val) {
 		for (let v of val) {
+			if (!Number.isInteger(v)) continue;
 			const leafNode = Node(v, null, null);
 
 			let node = root;
@@ -273,6 +274,6 @@ export function Tree(arr) {
 
 let t = Tree(ar);
 console.log(t.isBalanced());
-t.insert(100, 200, 300);
+t.insert(100, 200, 300, "vatsal");
 console.log(t.isBalanced());
 pp(t.getRoot());
